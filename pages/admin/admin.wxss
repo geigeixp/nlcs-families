@@ -1,0 +1,107 @@
+.container {
+  padding: 24rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.header-card .title {
+  font-size: 32rpx;
+  color: #222;
+  font-weight: 700;
+  margin-bottom: 6rpx;
+}
+
+.header-card .sub {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.warn {
+  color: #e03131;
+  font-size: 28rpx;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  border-top: 1rpx solid #f2f2f2;
+}
+
+.row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.k {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.v {
+  font-size: 28rpx;
+  color: #333;
+  max-width: 440rpx;
+  text-align: right;
+  word-break: break-all;
+}
+
+.link {
+  color: #1296db;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18rpx;
+}
+
+.approve {
+  background: #2f9e44;
+  color: #fff;
+  margin-left: 14rpx;
+}
+
+.reject {
+  background: #e03131;
+  color: #fff;
+  margin-left: 14rpx;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 60rpx 0;
+  font-size: 28rpx;
+}
+
+.margin-top {
+  margin-top: 10rpx;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  background: #f6f6f6;
+  border-radius: 16rpx;
+  padding: 14rpx 18rpx;
+  font-size: 26rpx;
+}
+
+.btn-more {
+  background: #1296db;
+  color: #fff;
+}

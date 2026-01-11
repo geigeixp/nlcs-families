@@ -1,0 +1,9 @@
+{
+  "name": "toggleCollection",
+  "version": "1.0.0",
+  "description": "Toggle collection status for post or comment",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

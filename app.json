@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/post/post",
+    "pages/profile/profile",
+    "pages/register/register",
+    "pages/status/status",
+    "pages/admin/admin",
+    "pages/child-info/child-info",
+    "pages/my-posts/my-posts",
+    "pages/settings/settings",
+    "pages/documents/documents",
+    "pages/edit-post/edit-post",
+    "pages/messages/messages",
+    "pages/webview/webview",
+    "pages/post-detail/post-detail",
+    "pages/alumni/alumni"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "NLCS 家长社群",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1296db",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "社群"
+      },
+      {
+        "pagePath": "pages/documents/documents",
+        "text": "文档"
+      },
+      {
+        "pagePath": "pages/alumni/alumni",
+        "text": "校友录"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

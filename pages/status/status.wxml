@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="card">
+    <view class="title">当前状态</view>
+    <view class="status {{statusClass}}">{{statusText}}</view>
+    <view class="desc" wx:if="{{statusDesc}}">{{statusDesc}}</view>
+    <view class="note" wx:if="{{reviewNote}}">原因：{{reviewNote}}</view>
+  </view>
+
+  <view class="card" wx:if="{{application}}">
+    <view class="title">提交信息</view>
+    <view class="row"><text class="k">入学年份</text><text class="v">{{application.student.admissionYear}}</text></view>
+    <view class="row"><text class="k">入学年级</text><text class="v">{{application.student.entryGradeAtEntry}}</text></view>
+    <view class="row"><text class="k">英文名</text><text class="v">{{application.student.englishName}}</text></view>
+    <view class="row" wx:if="{{application.student.chineseName}}"><text class="k">中文名</text><text class="v">{{application.student.chineseName}}</text></view>
+    <view class="row"><text class="k">关系</text><text class="v">{{relationFull}}</text></view>
+    <view class="row"><text class="k">通知书</text><text class="v link" bindtap="previewLetter">查看截图</text></view>
+  </view>
+
+  <view class="footer">
+    <button class="primary" wx:if="{{status === 'none'}}" bindtap="goRegister">去申请</button>
+    <button class="primary" wx:if="{{status === 'pending'}}" bindtap="goRegister">修改申请</button>
+    <button class="primary" wx:if="{{status === 'rejected'}}" bindtap="goRegister">重新提交</button>
+    <button class="primary" wx:if="{{status === 'approved'}}" bindtap="enterApp">进入社群</button>
+
+    <button class="ghost" wx:if="{{isAdmin}}" bindtap="goAdmin">管理员审核</button>
+  </view>
+</view>
+

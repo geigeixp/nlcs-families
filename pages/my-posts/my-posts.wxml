@@ -1,0 +1,103 @@
+<view class="feed-container">
+  <block wx:for="{{posts}}" wx:key="_id">
+    <view class="card">
+      <view class="card-header">
+        <view class="header-left">
+          <image class="avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="user-info">
+            <text class="username">{{item.author}}</text>
+            <text class="time">{{item.time}}</text>
+          </view>
+        </view>
+        <view class="header-right">
+          <view class="unread-badge" wx:if="{{unreadMap[item._id] && unreadMap[item._id].total > 0}}">
+            <text class="unread-text">{{unreadMap[item._id].total > 99 ? '99+' : unreadMap[item._id].total}}</text>
+          </view>
+          <text class="post-edit" catchtap="editPost" data-id="{{item._id}}">编辑</text>
+          <text class="post-delete" catchtap="deletePost" data-id="{{item._id}}">删除</text>
+        </view>
+      </view>
+
+      <view class="card-content">
+        <text class="category-tag" wx:if="{{item.category}}">#{{item.category}}</text>
+        <text class="content-text" selectable="true">
+          <block wx:for="{{item.contentParts}}" wx:key="idx">
+            <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+            <text wx:elif="{{item.type === 'url'}}" class="link-text" catchtap="onLinkTap" data-type="url" data-href="{{item.href}}">{{item.text}}</text>
+            <text wx:elif="{{item.type === 'email'}}" class="link-text" catchtap="onLinkTap" data-type="email" data-href="{{item.href}}">{{item.text}}</text>
+          </block>
+        </text>
+      </view>
+
+      <view class="card-images" wx:if="{{item.images.length > 0}}">
+        <view class="image-grid grid-{{item.images.length === 1 ? '1' : (item.images.length === 2 || item.images.length === 4) ? '2' : '3'}}">
+          <block wx:for="{{item.images}}" wx:for-item="img" wx:key="*this">
+            <image
+              class="post-image"
+              src="{{img}}"
+              mode="aspectFill"
+              catchtap="previewImage"
+              data-current="{{img}}"
+              data-urls="{{item.images}}">
+            </image>
+          </block>
+        </view>
+      </view>
+
+      <view class="card-footer">
+        <view class="action-item" catchtap="openComments" data-id="{{item._id}}">
+          <text class="action-text">评论 {{item.comments}}</text>
+        </view>
+        <view class="action-item">
+          <text class="action-text">点赞 {{item.likes}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view class="loading-tip" wx:if="{{posts.length === 0 && !isLoading}}">
+    <text>暂无发布内容</text>
+  </view>
+</view>
+
+<view class="comment-mask" wx:if="{{showComments}}" catchtap="closeComments"></view>
+<view class="comment-panel" wx:if="{{showComments}}">
+  <view class="comment-header">
+    <text class="comment-title">评论</text>
+    <text class="comment-close" catchtap="closeComments">×</text>
+  </view>
+
+  <scroll-view class="comment-list" scroll-y="true">
+    <view class="comment-empty" wx:if="{{commentList.length === 0}}">
+      <text>暂无评论，来抢沙发~</text>
+    </view>
+    <block wx:for="{{commentList}}" wx:key="_id">
+      <view class="comment-item">
+        <image class="comment-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+        <view class="comment-body">
+          <view class="comment-header-row">
+            <text class="comment-author">{{item.author}}</text>
+            <text class="comment-time">{{item.time}}</text>
+          </view>
+          
+          <text class="comment-content" selectable="true">
+            <block wx:for="{{item.contentParts}}" wx:for-item="part" wx:for-index="idx" wx:key="idx">
+              <text wx:if="{{part.type === 'text'}}">{{part.text}}</text>
+              <text wx:elif="{{part.type === 'url'}}" class="link-text" catchtap="onLinkTap" data-type="url" data-href="{{part.href}}">{{part.text}}</text>
+              <text wx:elif="{{part.type === 'email'}}" class="link-text" catchtap="onLinkTap" data-type="email" data-href="{{part.href}}">{{part.text}}</text>
+            </block>
+          </text>
+
+          <view class="comment-actions">
+            <view class="comment-action-item" wx:if="{{item.canEdit}}" catchtap="editComment" data-id="{{item._id}}" data-content="{{item.content}}">
+               <text>编辑</text>
+            </view>
+            <view class="comment-action-item" wx:if="{{item.canDelete}}" catchtap="deleteComment" data-id="{{item._id}}">
+               <text style="color: #fa5151;">删除</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

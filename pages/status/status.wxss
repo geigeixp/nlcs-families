@@ -1,0 +1,98 @@
+.container {
+  padding: 24rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 32rpx;
+  color: #222;
+  font-weight: 600;
+  margin-bottom: 18rpx;
+}
+
+.status {
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: 10rpx;
+}
+
+.status.pending {
+  color: #f59f00;
+}
+
+.status.approved {
+  color: #2f9e44;
+}
+
+.status.rejected {
+  color: #e03131;
+}
+
+.status.none {
+  color: #666;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 10rpx;
+}
+
+.note {
+  font-size: 26rpx;
+  color: #e03131;
+  margin-top: 14rpx;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  border-top: 1rpx solid #f2f2f2;
+}
+
+.k {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.v {
+  font-size: 28rpx;
+  color: #333;
+  max-width: 440rpx;
+  text-align: right;
+  word-break: break-all;
+}
+
+.link {
+  color: #1296db;
+}
+
+.footer {
+  padding: 10rpx 0 40rpx;
+}
+
+.primary {
+  background: #1296db;
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+}
+
+.ghost {
+  margin-top: 18rpx;
+  background: #fff;
+  color: #1296db;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}
+

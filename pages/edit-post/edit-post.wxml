@@ -1,0 +1,44 @@
+<view class="post-container">
+  <view class="gated-tip" wx:if="{{!approved}}">
+    <text>审核通过后才能编辑内容</text>
+    <button class="gated-btn" size="mini" bindtap="goStatus">查看审核状态</button>
+  </view>
+
+  <view class="input-area">
+    <textarea
+      class="text-input"
+      placeholder="修改帖子内容..."
+      placeholder-style="color:#999;"
+      maxlength="5000"
+      bindinput="onInput"
+      value="{{content}}"
+      auto-height
+      disabled="{{!approved}}"
+    ></textarea>
+  </view>
+
+  <view class="category-area" wx:if="{{approved}}">
+    <view class="category-title">选择话题</view>
+    <view class="category-list">
+      <view
+        class="category-item {{selectedCategoryIndex === index ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="*this"
+        bindtap="selectCategory"
+        data-index="{{index}}"
+      >
+        # {{item}}
+      </view>
+    </view>
+  </view>
+
+  <view class="image-area" wx:if="{{images.length}}">
+    <block wx:for="{{images}}" wx:key="*this">
+      <view class="image-wrap">
+        <image class="selected-image" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+      </view>
+    </block>
+  </view>
+
+  <button class="submit-btn" bindtap="submitUpdate" loading="{{saving}}" disabled="{{!approved}}">保存修改</button>
+</view>

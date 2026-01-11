@@ -1,0 +1,114 @@
+<wxs module="utils">
+var includes = function(array, item) {
+  return array && array.indexOf(item) > -1
+}
+module.exports = {
+  includes: includes
+}
+</wxs>
+<view class="container">
+  <view class="card header-card">
+    <view class="title">待审核（{{pendingCount}}）</view>
+    <view class="sub">点击“通过/拒绝”完成审核</view>
+  </view>
+
+  <view class="card" wx:if="{{!isAdmin}}">
+    <view class="warn">你当前不是管理员，无法审核</view>
+  </view>
+
+  <block wx:for="{{pendingApplications}}" wx:key="_id">
+    <view class="card">
+      <view class="row">
+        <text class="k">英文名</text>
+        <text class="v">{{item.student.englishName}}</text>
+      </view>
+      <view class="row" wx:if="{{item.student.chineseName}}">
+        <text class="k">中文名</text>
+        <text class="v">{{item.student.chineseName}}</text>
+      </view>
+      <view class="row">
+        <text class="k">入学年份</text>
+        <text class="v">{{item.student.admissionYear}}</text>
+      </view>
+      <view class="row">
+        <text class="k">入学年级</text>
+        <text class="v">{{item.student.entryGradeAtEntry}}</text>
+      </view>
+      <view class="row">
+        <text class="k">关系</text>
+        <text class="v">{{item.relationFull}}</text>
+      </view>
+      <view class="row">
+        <text class="k">通知书</text>
+        <text class="v link" bindtap="previewLetter" data-fileid="{{item.letterFileId}}">查看截图</text>
+      </view>
+
+      <view class="actions">
+        <button class="approve" size="mini" disabled="{{!isAdmin}}" bindtap="approve" data-openid="{{item.openid}}">通过</button>
+        <button class="reject" size="mini" disabled="{{!isAdmin}}" bindtap="reject" data-openid="{{item.openid}}">拒绝</button>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:if="{{pendingCount === 0}}">
+    <text>暂无待审核申请</text>
+  </view>
+
+  <view class="card header-card margin-top" wx:if="{{isAdmin}}">
+    <view class="title">已通过用户（{{approvedCount}}）</view>
+    <view class="sub">可搜索并撤销权限（不删除历史数据）</view>
+  </view>
+
+  <view class="card" wx:if="{{isAdmin}}">
+    <button type="warn" size="mini" bindtap="onMigrateGrades" style="margin-bottom: 20rpx;">重置/迁移所有用户年级数据</button>
+    <view class="search-row">
+      <input class="search-input" placeholder="搜索姓名/邮箱/电话/openid" bindinput="onApprovedKeywordInput" value="{{approvedKeyword}}" />
+      <button class="btn-more" size="mini" bindtap="loadMoreApproved" disabled="{{!approvedHasMore || approvedLoading}}">加载更多</button>
+    </view>
+  </view>
+
+  <block wx:for="{{approvedApplications}}" wx:key="_id">
+    <view class="card" wx:if="{{isAdmin}}">
+      <view class="row">
+        <text class="k">学生</text>
+        <view class="v">
+          <text>{{item.studentName}}</text>
+          <text wx:if="{{utils.includes(adminList, item.openid)}}" style="color: #e03131; font-weight: bold; margin-left: 10rpx; font-size: 24rpx;">(管理员)</text>
+        </view>
+      </view>
+      <view class="row">
+        <text class="k">关系</text>
+        <text class="v">{{item.relationFull}}</text>
+      </view>
+      <view class="row" wx:if="{{item.profile && item.profile.email}}">
+        <text class="k">邮箱</text>
+        <text class="v">{{item.profile.email}}</text>
+      </view>
+      <view class="row" wx:if="{{item.profile && item.profile.phone}}">
+        <text class="k">电话</text>
+        <text class="v">{{item.profile.phone}}</text>
+      </view>
+      <view class="row">
+        <text class="k">OpenID</text>
+        <text class="v">{{item.openid}}</text>
+      </view>
+      <view class="actions">
+        <button class="reject" size="mini" bindtap="revokeApproved" data-openid="{{item.openid}}">撤销</button>
+        <button 
+          type="{{utils.includes(adminList, item.openid) ? 'warn' : 'primary'}}" 
+          size="mini" 
+          bindtap="toggleAdmin" 
+          data-openid="{{item.openid}}" 
+          data-name="{{item.studentName}}"
+          style="margin-left: 20rpx;"
+        >
+          {{utils.includes(adminList, item.openid) ? '移除管理员' : '设为管理员'}}
+        </button>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:if="{{isAdmin && approvedCount === 0}}">
+    <text>暂无已通过用户</text>
+  </view>
+</view>

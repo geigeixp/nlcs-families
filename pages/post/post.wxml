@@ -1,0 +1,49 @@
+<view class="post-container">
+  <view class="gated-tip" wx:if="{{!approved}}">
+    <text>审核通过后才能发布内容</text>
+    <button class="gated-btn" size="mini" bindtap="goStatus">查看审核状态</button>
+  </view>
+  <view class="input-area">
+    <textarea 
+      class="text-input" 
+      placeholder="分享孩子们的点滴..." 
+      placeholder-style="color:#999;"
+      maxlength="5000"
+      bindinput="onInput"
+      value="{{content}}"
+      auto-height
+      disabled="{{!approved}}"
+    ></textarea>
+  </view>
+
+  <!-- 分类标签选择 -->
+  <view class="category-area" wx:if="{{approved}}">
+    <view class="category-title">选择话题</view>
+    <view class="category-list">
+      <view 
+        class="category-item {{selectedCategoryIndex === index ? 'active' : ''}}" 
+        wx:for="{{categories}}" 
+        wx:key="*this"
+        bindtap="selectCategory"
+        data-index="{{index}}"
+      >
+        # {{item}}
+      </view>
+    </view>
+  </view>
+
+  <view class="image-area">
+    <block wx:for="{{images}}" wx:key="*this">
+      <view class="image-wrap">
+        <image class="selected-image" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+        <view class="delete-btn" catchtap="removeImage" data-index="{{index}}">×</view>
+      </view>
+    </block>
+    <!-- 图片选择按钮，最多9张 -->
+    <view class="add-btn" bindtap="chooseImage" wx:if="{{images.length < 9 && approved}}">
+      <text class="plus">+</text>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="submitPost" disabled="{{(!content && images.length === 0) || !approved}}">发布</button>
+</view>

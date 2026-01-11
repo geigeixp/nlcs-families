@@ -1,0 +1,144 @@
+<view class="container">
+  <view class="gated-tip" wx:if="{{!isApproved}}" style="margin: 20rpx; padding: 40rpx; text-align: center; background: #fff; border-radius: 12rpx;">
+    <view style="margin-bottom: 20rpx; color: #666;">审核通过后才能使用校友录功能</view>
+    <button size="mini" type="primary" bindtap="goStatus">查看审核状态</button>
+  </view>
+
+  <block wx:if="{{isApproved}}">
+    <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+        <icon type="search" size="16" color="#999"></icon>
+        <input type="text" placeholder="搜索学生姓名 (中文/英文)" confirm-type="search" bindconfirm="onSearch" bindinput="onSearchInput" value="{{keyword}}" />
+        <icon wx:if="{{keyword}}" type="clear" size="16" color="#ccc" bindtap="clearSearch"></icon>
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- Filters -->
+  <view class="filters">
+    <picker mode="selector" range="{{admissionYears}}" bindchange="onYearChange">
+      <view class="filter-item {{selectedYear ? 'active' : ''}}">
+        <text>{{selectedYear || '入学年份'}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <picker mode="selector" range="{{entryGrades}}" bindchange="onGradeChange">
+      <view class="filter-item {{selectedGrade ? 'active' : ''}}">
+        <text>{{selectedGrade || '入学年级'}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <view class="filter-item {{currentClass ? 'active' : ''}}" bindtap="showClassInputModal">
+        <text>{{currentClass || '当前班级'}}</text>
+        <text class="arrow">▼</text>
+    </view>
+    <view class="filter-item reset" bindtap="resetFilters">
+        <text>重置</text>
+    </view>
+  </view>
+  
+  <!-- Class Input Modal -->
+  <modal hidden="{{!showClassInput}}" title="输入班级" confirm-text="确定" cancel-text="取消" bindcancel="hideClassInputModal" bindconfirm="onClassConfirm">
+      <input class="class-modal-input" placeholder="例如: 9E" value="{{tempClassInput}}" bindinput="onTempClassInput" />
+  </modal>
+
+  <!-- List -->
+  <scroll-view scroll-y class="student-list" bindscrolltolower="onReachBottom" refresher-enabled="{{true}}" bindrefresherrefresh="onRefresh" refresher-triggered="{{isRefreshing}}">
+    <view wx:if="{{!hasSearched}}" class="empty-tip">
+        <image src="/images/search-placeholder.png" mode="widthFix" style="width: 100px; margin-bottom: 10px;"></image>
+        <view>请使用上方搜索或筛选功能查找校友</view>
+    </view>
+    
+    <block wx:if="{{hasSearched}}">
+        <block wx:for="{{students}}" wx:key="uniqueId">
+        <view class="student-card" bindtap="viewProfile" data-openid="{{item.openid}}" data-nickname="{{item.parentNickName}}" data-avatar="{{item.parentAvatarUrl}}">
+            <view class="card-left">
+                <image class="avatar" src="{{item.parentAvatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+            </view>
+            <view class="card-right">
+                <view class="card-header">
+                    <view class="student-name">{{item.englishName}} {{item.chineseName}}</view>
+                    <view class="student-class tag" wx:if="{{item.currentClass}}">{{item.currentClass}}</view>
+                </view>
+                <view class="card-info">
+                    <view class="info-item">
+                        <text class="label">入学:</text> {{item.admissionYear}} ({{item.entryGradeAtEntry}})
+                    </view>
+                    <view class="info-item">
+                        <text class="label">家长:</text> {{item.parentNickName || '家长'}} ({{item.relation}})
+                    </view>
+                </view>
+            </view>
+        </view>
+        </block>
+        
+        <view wx:if="{{students.length === 0 && !loading}}" class="empty-tip">
+        <image src="/images/empty.png" mode="widthFix" style="width: 100px; margin-bottom: 10px;"></image>
+        <view>未找到相关校友</view>
+        </view>
+        <view wx:if="{{loading}}" class="loading-tip">
+        加载中...
+        </view>
+        <view wx:if="{{!hasMore && students.length > 0}}" class="no-more-tip">
+        没有更多了
+        </view>
+    </block>
+  </scroll-view>
+  </block>
+
+    <!-- Author Info Modal (Reused) -->
+  <view class="modal-mask" wx:if="{{showAuthorModal && isApproved}}" bindtap="closeAuthorModal"></view>
+  <view class="author-modal" wx:if="{{showAuthorModal && isApproved}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <image class="modal-avatar" src="{{authorInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="modal-user-info">
+          <view class="modal-user-name">{{authorInfo.nickName}}</view>
+          <view class="modal-user-role">
+            <text class="role-tag">{{authorInfo.role || '家长'}}</text>
+            <text class="class-tag" wx:if="{{authorInfo.childClass}}">{{authorInfo.childClass}}</text>
+          </view>
+        </view>
+        <view class="close-btn" bindtap="closeAuthorModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <view class="info-list">
+          <view class="info-row" wx:if="{{authorInfo.childName}}">
+            <text class="info-label">孩子姓名</text>
+            <text class="info-value">{{authorInfo.childName}}</text>
+          </view>
+          <view class="info-row" wx:if="{{authorInfo.childClass}}">
+            <text class="info-label">当前班级</text>
+            <text class="info-value">{{authorInfo.childClass}}</text>
+          </view>
+          <view class="info-row" wx:if="{{authorInfo.admissionInfo}}">
+            <text class="info-label">入学信息</text>
+            <text class="info-value">{{authorInfo.admissionInfo}}</text>
+          </view>
+          <view class="info-row" wx:if="{{authorInfo.interests}}">
+            <text class="info-label">兴趣爱好</text>
+            <text class="info-value">{{authorInfo.interests}}</text>
+          </view>
+          <view class="info-row" wx:if="{{authorInfo.introduction}}">
+            <text class="info-label">个人简介</text>
+            <text class="info-value">{{authorInfo.introduction}}</text>
+          </view>
+           <view class="info-row" wx:if="{{authorInfo.company}}">
+            <text class="info-label">公司</text>
+            <text class="info-value">{{authorInfo.company}}</text>
+          </view>
+          <view class="info-row" wx:if="{{authorInfo.position}}">
+            <text class="info-label">职位</text>
+            <text class="info-value">{{authorInfo.position}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="action-btn" bindtap="closeAuthorModal">关闭</button>
+      </view>
+    </view>
+  </view>
+</view>

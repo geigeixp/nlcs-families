@@ -1,0 +1,104 @@
+<view class="profile-container">
+  <view class="header">
+    <view class="user-info">
+      <view class="avatar-wrap">
+        <image class="avatar" src="{{avatarUrl}}"></image>
+      </view>
+      <view class="info-text">
+        <text class="name">{{childNameRelation || displayName}}</text>
+        <text class="role">{{currentClass || displayDesc}}</text>
+      </view>
+    </view>
+    
+    <!-- 联系方式展示 -->
+    <view class="contact-info-card" wx:if="{{contactInfo}}">
+      <view class="contact-row" wx:if="{{contactInfo.phone}}">
+        <text class="contact-label">电话：</text>
+        <text class="contact-value">{{contactInfo.phone}}</text>
+      </view>
+      <view class="contact-row" wx:if="{{contactInfo.email}}">
+        <text class="contact-label">邮箱：</text>
+        <text class="contact-value">{{contactInfo.email}}</text>
+      </view>
+      <view class="contact-row" wx:if="{{contactInfo.address}}">
+        <text class="contact-label">地址：</text>
+        <text class="contact-value">{{contactInfo.address}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item margin-top" bindtap="goStatus">
+      <view class="item-left">
+        <text class="menu-text">审核状态：{{statusText}}</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+
+    <view class="menu-item" wx:if="{{status !== 'approved'}}" bindtap="goRegister">
+      <view class="item-left">
+        <text class="menu-text">申请加入/修改申请</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+
+    <view class="menu-item" wx:if="{{role === 'admin'}}" bindtap="goAdmin">
+      <view class="item-left">
+        <text class="menu-text">管理员审核</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goMessages">
+      <view class="item-left">
+        <text class="iconfont icon-message"></text>
+        <text class="menu-text">消息通知</text>
+        <view class="red-dot" wx:if="{{hasUnread}}"></view>
+      </view>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goMyPosts">
+      <view class="item-left">
+        <text class="iconfont icon-list"></text>
+        <text class="menu-text">我的发布</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goChildInfo">
+      <view class="item-left">
+        <text class="iconfont icon-child"></text>
+        <text class="menu-text">孩子信息</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+
+    <view class="menu-item margin-top" bindtap="goSettings">
+      <view class="item-left">
+        <text class="iconfont icon-settings"></text>
+        <text class="menu-text">设置</text>
+      </view>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <view class="admin-entry" wx:if="{{role !== 'admin'}}">
+    <view class="section-title">管理员入口</view>
+    <view class="input-group">
+      <input class="admin-input" placeholder="输入管理员口令" password type="text" bindinput="onAdminCodeInput" value="{{adminCode}}" />
+      <button class="btn-switch" size="mini" type="primary" bindtap="switchToAdmin">切换</button>
+    </view>
+  </view>
+
+  <view class="admin-entry" wx:if="{{role === 'admin'}}">
+    <view class="section-title">管理员操作</view>
+    <view class="admin-actions">
+      <button class="btn-admin" type="primary" bindtap="goAdmin">
+        管理员审核
+        <view class="badge" wx:if="{{pendingCount > 0}}">{{pendingCount}}</view>
+      </button>
+      <button class="btn-exit" type="warn" bindtap="exitAdmin">退出管理员模式</button>
+    </view>
+  </view>
+</view>

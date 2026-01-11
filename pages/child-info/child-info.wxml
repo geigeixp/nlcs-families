@@ -1,0 +1,126 @@
+<view class="container">
+  <!-- Primary Child Section -->
+  <view class="section-title">主要学生信息 (认证依据)</view>
+  <view class="header-card">
+    <view class="avatar-placeholder" bindtap="onChooseAvatar">
+      <image class="default-avatar" src="{{avatar || '../../images/icon_child.png'}}" mode="aspectFill"></image>
+    </view>
+    <view class="header-info" wx:if="{{student}}">
+      <view class="edit-name-row">
+        <text class="label-small">英文名</text>
+        <input class="name-input english" value="{{englishName}}" bindinput="onEnglishNameInput" placeholder="英文名" />
+      </view>
+      <view class="edit-name-row">
+        <text class="label-small">中文名</text>
+        <input class="name-input chinese" value="{{chineseName}}" bindinput="onChineseNameInput" placeholder="中文名(选填)" />
+      </view>
+    </view>
+  </view>
+
+  <view class="info-card" wx:if="{{student}}">
+    <view class="card-title">基本信息</view>
+    
+    <view class="info-row">
+      <view class="label-row">
+        <text class="label">目前班级 <text style="color:red;font-size:24rpx" wx:if="{{!currentClass}}">(未填写)</text></text>
+        <icon class="help-icon" type="info" size="14" color="#999" bindtap="showClassHelp"></icon>
+      </view>
+      <input class="value input-value" placeholder="班级名(如6A)/新生/已离校" placeholder-class="input-placeholder" value="{{currentClass}}" bindinput="onCurrentClassInput" />
+    </view>
+
+    <view class="info-row">
+      <text class="label">入学年份</text>
+      <picker mode="selector" range="{{admissionYears}}" value="{{admissionYearIndex}}" bindchange="onAdmissionYearChange">
+        <view class="value picker-value">{{admissionYearDisplay}}</view>
+      </picker>
+    </view>
+    
+    <view class="info-row">
+      <text class="label">入学年级</text>
+      <picker mode="selector" range="{{entryGrades}}" value="{{entryGradeIndex}}" bindchange="onEntryGradeChange">
+        <view class="value picker-value">{{entryGradeDisplay}}</view>
+      </picker>
+    </view>
+    
+    <view class="info-row">
+      <text class="label">家长关系</text>
+      <text class="value">{{student.relation === '其他' ? student.relationOther : student.relation}}</text>
+    </view>
+  </view>
+
+  <!-- Siblings Section -->
+  <view class="section-title" style="margin-top: 40rpx;">其他孩子信息</view>
+  <block wx:for="{{siblings}}" wx:key="index">
+    <view class="info-card sibling-card">
+      <view class="card-header-row">
+        <view class="card-title">{{item.englishName}} {{item.chineseName ? '(' + item.chineseName + ')' : ''}}</view>
+        <view class="card-actions">
+          <view class="action-btn edit" catchtap="editSibling" data-index="{{index}}">编辑</view>
+          <view class="action-btn delete" catchtap="deleteSibling" data-index="{{index}}">删除</view>
+        </view>
+      </view>
+      
+      <view class="info-row">
+        <text class="label">目前班级</text>
+        <text class="value">{{item.currentClass || '未填写'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">入学年份</text>
+        <text class="value">{{item.admissionYear}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">入学年级</text>
+        <text class="value">{{item.entryGradeAtEntry}}</text>
+      </view>
+    </view>
+  </block>
+
+  <button class="add-btn" bindtap="addSibling">+ 添加孩子</button>
+
+  <button class="save-btn" bindtap="saveInfo">保存所有修改</button>
+  
+  <view class="empty-state" wx:if="{{!student}}">
+    <text>暂无学生信息</text>
+  </view>
+
+  <!-- Sibling Edit Modal -->
+  <view class="modal-mask" wx:if="{{showSiblingModal}}" bindtap="closeSiblingModal"></view>
+  <view class="modal-panel" wx:if="{{showSiblingModal}}">
+    <view class="modal-title">{{editingSiblingIndex === -1 ? '添加孩子' : '编辑孩子'}}</view>
+    
+    <view class="form-field">
+      <text class="form-label">英文名 (必填)</text>
+      <input class="form-input" placeholder="例如: Jason" value="{{siblingForm.englishName}}" data-field="englishName" bindinput="onSiblingInput" />
+    </view>
+    
+    <view class="form-field">
+      <text class="form-label">中文名 (可选)</text>
+      <input class="form-input" placeholder="例如: 张三" value="{{siblingForm.chineseName}}" data-field="chineseName" bindinput="onSiblingInput" />
+    </view>
+
+    <view class="form-field">
+      <text class="form-label">入学年份</text>
+      <picker mode="selector" range="{{admissionYears}}" value="{{siblingForm.admissionYearIndex}}" bindchange="onSiblingYearChange">
+        <view class="form-picker">{{siblingForm.admissionYear || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-field">
+      <text class="form-label">入学年级</text>
+      <picker mode="selector" range="{{entryGrades}}" value="{{siblingForm.entryGradeIndex}}" bindchange="onSiblingGradeChange">
+        <view class="form-picker">{{siblingForm.entryGradeAtEntry || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-field">
+      <view class="label-row">
+        <text class="form-label">目前班级</text>
+        <icon class="help-icon" type="info" size="14" color="#999" bindtap="showClassHelp"></icon>
+      </view>
+      <input class="form-input" placeholder="班级名(如6A)/新生/已离校" placeholder-class="input-placeholder" value="{{siblingForm.currentClass}}" data-field="currentClass" bindinput="onSiblingInput" />
+    </view>
+
+    <button class="modal-btn" bindtap="confirmSibling">确定</button>
+  </view>
+
+</view>

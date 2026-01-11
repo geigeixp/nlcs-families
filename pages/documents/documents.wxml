@@ -1,0 +1,45 @@
+<view class="container">
+  <view class="header">
+    <text class="title">共享文档</text>
+    <text class="subtitle">学校日历、通知及常用表格</text>
+    <text class="subtitle" wx:if="{{isAdmin}}" style="font-size: 22rpx; color: #aaa; margin-top: 6rpx;">(支持图片、文档、视频、音频等，单个文件大小不超过50M)</text>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-wrap">
+      <icon type="search" size="16" color="#999"></icon>
+      <input class="search-input" placeholder="搜索文档名称" value="{{keyword}}" bindinput="onSearchInput" confirm-type="search"/>
+      <icon wx:if="{{keyword}}" type="clear" size="16" color="#ccc" catchtap="onSearchInput" data-value=""></icon>
+    </view>
+  </view>
+
+  <view class="doc-list" wx:if="{{isApproved}}">
+    <block wx:if="{{documents.length > 0}}">
+      <view class="doc-item" wx:for="{{documents}}" wx:key="_id" bindtap="openDocument" data-doc="{{item}}">
+        <view class="doc-icon {{item.type}}"></view>
+        <view class="doc-info">
+          <text class="doc-title">{{item.title}}</text>
+          <text class="doc-date">{{item.createTimeStr}}</text>
+        </view>
+        <view class="doc-action" wx:if="{{isAdmin}}">
+          <text class="action-btn rename-btn" catchtap="renameDocument" data-doc="{{item}}">重命名</text>
+          <text class="action-btn delete-btn" catchtap="deleteDocument" data-doc="{{item}}">删除</text>
+        </view>
+      </view>
+    </block>
+    <view class="empty" wx:else>
+      <text>暂无共享文档</text>
+    </view>
+  </view>
+  
+  <view class="empty" wx:if="{{!isApproved}}" style="margin-top: 50rpx;">
+    <text>审核通过后才能查看共享文档</text>
+    <button size="mini" type="primary" style="margin-top: 20rpx;" bindtap="goStatus">查看审核状态</button>
+  </view>
+
+  <!-- 管理员上传按钮 -->
+  <view class="fab-btn" wx:if="{{isAdmin}}" bindtap="uploadFile">
+    <text class="plus">+</text>
+  </view>
+</view>

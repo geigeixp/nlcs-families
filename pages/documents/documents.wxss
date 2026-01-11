@@ -1,0 +1,172 @@
+.container {
+  padding: 30rpx;
+  background-color: #f6f6f6;
+  min-height: 100vh;
+  padding-bottom: 120rpx; /* 为悬浮按钮留出空间 */
+}
+
+.header {
+  margin-bottom: 30rpx;
+}
+
+.title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+.search-bar {
+  margin-bottom: 20rpx;
+}
+
+.search-wrap {
+  background-color: #fff;
+  border-radius: 36rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  border: 1rpx solid #eee;
+}
+
+.search-input {
+  flex: 1;
+  margin: 0 10rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.doc-list {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.doc-item:last-child {
+  border-bottom: none;
+}
+
+.doc-item:active {
+  background-color: #fafafa;
+}
+
+.doc-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  background-color: #eee;
+  margin-right: 20rpx;
+  position: relative;
+}
+
+/* 简单的CSS图标模拟 */
+.doc-icon::after {
+  content: 'FILE';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.doc-icon.pdf { background-color: #e74c3c; }
+.doc-icon.pdf::after { content: 'PDF'; }
+
+.doc-icon.word { background-color: #3498db; }
+.doc-icon.word::after { content: 'WORD'; }
+
+.doc-icon.excel { background-color: #27ae60; }
+.doc-icon.excel::after { content: 'XLS'; }
+
+.doc-icon.ppt { background-color: #e67e22; }
+.doc-icon.ppt::after { content: 'PPT'; }
+
+.doc-icon.image { background-color: #9b59b6; }
+.doc-icon.image::after { content: 'IMG'; }
+
+.doc-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.doc-title {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doc-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.doc-action {
+  display: flex;
+  gap: 10rpx;
+}
+
+.action-btn {
+  padding: 10rpx 20rpx;
+  font-size: 24rpx;
+  border-radius: 8rpx;
+}
+
+.rename-btn {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.delete-btn {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.empty {
+  padding: 60rpx;
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 悬浮上传按钮 */
+.fab-btn {
+  position: fixed;
+  bottom: 60rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #1296db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(18, 150, 219, 0.4);
+}
+
+.plus {
+  color: #fff;
+  font-size: 60rpx;
+  font-weight: 300;
+  margin-top: -10rpx;
+}

@@ -1,0 +1,62 @@
+<view class="container">
+  <view class="card">
+    <view class="title">学生信息</view>
+
+    <view class="field">
+      <view class="label">入学年份</view>
+      <picker mode="selector" range="{{admissionYears}}" value="{{admissionYearIndex}}" bindchange="onAdmissionYearChange">
+        <view class="picker">{{admissionYearDisplay}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">入学时年级</view>
+      <picker mode="selector" range="{{entryGrades}}" value="{{entryGradeIndex}}" bindchange="onEntryGradeChange">
+        <view class="picker">{{entryGradeDisplay}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">英文名（必选）</view>
+      <input class="input" placeholder="例如：Jason" value="{{englishName}}" bindinput="onEnglishNameInput" />
+    </view>
+
+    <view class="field">
+      <view class="label">中文名（可选）</view>
+      <input class="input" placeholder="例如：张三" value="{{chineseName}}" bindinput="onChineseNameInput" />
+    </view>
+
+    <view class="field">
+      <view class="label">与学生关系</view>
+      <picker mode="selector" range="{{relations}}" value="{{relationIndex}}" bindchange="onRelationChange">
+        <view class="picker">{{relationDisplay}}</view>
+      </picker>
+    </view>
+
+    <view class="field" wx:if="{{relationDisplay === '其他'}}">
+      <view class="label">关系补充</view>
+      <input class="input" placeholder="例如：监护人/叔叔等" value="{{relationOther}}" bindinput="onRelationOtherInput" />
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="title">学生身份证明</view>
+    <view class="hint">需上传1张截图，新生可用入学通知书，老生可用最新的成绩单第一页，毕业生用毕业证等</view>
+
+    <view class="image-row">
+      <view class="image-box" wx:if="{{letterTempUrl || letterImagePath}}" bindtap="previewLetter">
+        <image class="image" src="{{letterTempUrl || letterImagePath}}" mode="aspectFill" />
+        <view class="remove" catchtap="removeLetter">×</view>
+      </view>
+      <view class="add-box" wx:if="{{!(letterTempUrl || letterImagePath)}}" bindtap="chooseLetter">
+        <text class="plus">+</text>
+        <text class="add-text">上传</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="primary" bindtap="submit" loading="{{submitting}}" disabled="{{submitting}}">提交审核</button>
+    <button class="ghost" bindtap="goStatus">查看审核状态</button>
+  </view>
+</view>

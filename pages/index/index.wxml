@@ -1,0 +1,185 @@
+<view class="feed-container">
+  <view class="fixed-header">
+    <view class="feed-topbar">
+      <text class="feed-title">社群</text>
+      <button class="feed-post-btn" size="mini" bindtap="goPost" disabled="{{!approved}}">发布</button>
+    </view>
+    <view class="feed-filters" wx:if="{{approved}}">
+      <view class="search-bar">
+        <icon type="search" size="14"></icon>
+        <input class="search-input" placeholder="搜索内容或作者..." confirm-type="search" bindconfirm="onSearch" bindinput="onSearchInput" value="{{keyword}}" />
+        <icon wx:if="{{keyword}}" type="clear" size="14" catchtap="clearSearch"></icon>
+      </view>
+      <scroll-view class="category-scroll" scroll-x="true" show-scrollbar="false">
+        <view class="category-row">
+          <view class="pill {{selectedCategory === '' ? 'active' : ''}}" catchtap="selectCategory" data-category="">全部</view>
+          <block wx:for="{{categories}}" wx:key="*this">
+            <view class="pill {{selectedCategory === item ? 'active' : ''}}" catchtap="selectCategory" data-category="{{item}}">#{{item}}</view>
+          </block>
+        </view>
+      </scroll-view>
+      <view class="filter-row">
+        <view class="pill small {{sort === 'latest' ? 'active' : ''}}" catchtap="setSort" data-sort="latest">最新</view>
+        <view class="pill small {{sort === 'hot' ? 'active' : ''}}" catchtap="setSort" data-sort="hot">热门</view>
+        <view class="pill small {{hasImages ? 'active' : ''}}" catchtap="toggleHasImages">有图</view>
+        <view class="pill small {{onlyCollected ? 'active' : ''}}" catchtap="toggleCollected">收藏</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="header-spacer"></view>
+
+  <view class="gated-tip" wx:if="{{!approved}}">
+    <text>审核通过后才能查看社群内容</text>
+    <button class="gated-btn" size="mini" bindtap="goStatus">查看审核状态</button>
+  </view>
+  
+  <block wx:if="{{approved}}">
+    <block wx:for="{{posts}}" wx:key="id">
+    <view class="card">
+      <!-- 头部：头像和昵称 -->
+      <view class="card-header">
+        <view class="header-left">
+          <image class="avatar" src="{{item.avatar}}" mode="aspectFill" catchtap="showAuthorInfo" data-openid="{{item.openid || item._openid}}" data-author="{{item.author}}" data-avatar="{{item.avatar}}"></image>
+          <view class="user-info">
+            <text class="username" catchtap="showAuthorInfo" data-openid="{{item.openid || item._openid}}" data-author="{{item.author}}" data-avatar="{{item.avatar}}">{{item.author}}</text>
+            <text class="time">{{item.time}}</text>
+          </view>
+        </view>
+        <view class="header-right">
+          <text class="post-edit" wx:if="{{item.canEdit}}" catchtap="editPost" data-id="{{item._id}}">编辑</text>
+          <text class="post-delete" wx:if="{{item.canDelete}}" catchtap="deletePost" data-id="{{item._id}}">删除</text>
+        </view>
+      </view>
+      
+      <!-- 内容：文字 -->
+      <view class="card-content">
+        <text class="category-tag" wx:if="{{item.category}}">#{{item.category}}</text>
+        <text class="content-text" selectable="true">
+          <block wx:for="{{item.contentParts}}" wx:for-item="part" wx:for-index="idx" wx:key="idx">
+            <text wx:if="{{part.type === 'text'}}">{{part.text}}</text>
+            <text wx:elif="{{part.type === 'highlight'}}" class="highlight-text">{{part.text}}</text>
+            <text wx:elif="{{part.type === 'url'}}" class="link-text" catchtap="onLinkTap" data-type="url" data-href="{{part.href}}">{{part.text}}</text>
+            <text wx:elif="{{part.type === 'email'}}" class="link-text" catchtap="onLinkTap" data-type="email" data-href="{{part.href}}">{{part.text}}</text>
+          </block>
+        </text>
+      </view>
+
+      <!-- 内容：图片 -->
+      <view class="card-images" wx:if="{{item.images.length > 0}}">
+        <view class="image-grid grid-{{item.images.length === 1 ? '1' : (item.images.length === 2 || item.images.length === 4) ? '2' : '3'}}">
+          <block wx:for="{{item.images}}" wx:for-item="img" wx:key="*this">
+            <image 
+              class="post-image" 
+              src="{{img}}" 
+              mode="aspectFill" 
+              catchtap="previewImage" 
+              data-current="{{img}}" 
+              data-urls="{{item.images}}">
+            </image>
+          </block>
+        </view>
+      </view>
+
+      <!-- 底部：互动按钮 -->
+      <view class="card-footer">
+        <view class="action-item" catchtap="toggleLike" data-id="{{item._id}}">
+          <text class="action-text {{item.likedByMe ? 'liked' : ''}}">点赞 {{item.likes}}</text>
+        </view>
+        <view class="action-item" catchtap="toggleCollection" data-type="post" data-id="{{item._id}}">
+          <text class="action-text {{item.isCollected ? 'liked' : ''}}">收藏</text>
+        </view>
+        <view class="action-item" catchtap="openComments" data-id="{{item._id}}">
+          <text class="action-text">评论 {{item.comments}}</text>
+        </view>
+        <view class="action-item share-wrapper">
+          <button class="share-btn-inline" open-type="share" data-post="{{item}}">
+            <text class="action-text">分享</text>
+          </button>
+        </view>
+      </view>
+
+      <!-- 搜索结果匹配的评论展示 -->
+      <view class="match-comments" wx:if="{{item.matchComments && item.matchComments.length > 0}}">
+        <block wx:for="{{item.matchComments}}" wx:for-item="mc" wx:key="_id">
+          <view class="match-comment-item" catchtap="openComments" data-id="{{item._id}}">
+            <text class="match-label">包含关键词的评论：</text>
+            <text class="match-author">{{mc.author}}：</text>
+            <text class="match-content" user-select="true">
+              <block wx:for="{{mc.contentParts}}" wx:for-item="part" wx:for-index="idx" wx:key="idx">
+                <text wx:if="{{part.type === 'text'}}">{{part.text}}</text>
+                <text wx:elif="{{part.type === 'highlight'}}" class="highlight-text">{{part.text}}</text>
+                <text wx:elif="{{part.type === 'url'}}" class="link-text">{{part.text}}</text>
+                <text wx:elif="{{part.type === 'email'}}" class="link-text">{{part.text}}</text>
+              </block>
+            </text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+  </block>
+  
+  <view class="loading" wx:if="{{isLoading}}">加载中...</view>
+  
+  <view class="loading-tip" wx:if="{{posts.length === 0 && !isLoading}}">
+    <text wx:if="{{error}}" style="color: red;">{{error}}</text>
+    <text wx:else>暂无动态，快来发布第一条吧~</text>
+  </view>
+</view>
+
+<!-- Author Info Modal -->
+<view class="modal-mask" wx:if="{{showAuthorModal}}" bindtap="closeAuthorModal"></view>
+<view class="author-modal" wx:if="{{showAuthorModal}}">
+  <view class="author-card">
+    <view class="author-card-header">
+      <image class="author-card-avatar" src="{{authorInfo.avatar}}" mode="aspectFill"></image>
+      <view class="author-card-main">
+        <text class="author-card-name">{{authorInfo.author}}</text>
+        <text class="author-card-class" wx:if="{{authorInfo.currentClass}}">{{authorInfo.currentClass}}</text>
+      </view>
+    </view>
+    
+    <view class="author-card-body">
+      <block wx:if="{{!authorInfo.loading && !authorInfo.error}}">
+        <view class="info-row" wx:if="{{authorInfo.childName}}">
+          <text class="info-label">孩子</text>
+          <text class="info-value">{{authorInfo.childName}}</text>
+        </view>
+        <view class="info-row" wx:if="{{authorInfo.admissionYear}}">
+          <text class="info-label">入学年份</text>
+          <text class="info-value">{{authorInfo.admissionYear}}</text>
+        </view>
+        <view class="info-row" wx:if="{{authorInfo.entryGradeAtEntry}}">
+          <text class="info-label">入学年级</text>
+          <text class="info-value">{{authorInfo.entryGradeAtEntry}}</text>
+        </view>
+        <view class="info-row" wx:if="{{authorInfo.phone}}">
+          <text class="info-label">电话</text>
+          <text class="info-value">{{authorInfo.phone}}</text>
+        </view>
+        <view class="info-row" wx:if="{{authorInfo.email}}">
+          <text class="info-label">邮箱</text>
+          <text class="info-value">{{authorInfo.email}}</text>
+        </view>
+        <view class="info-row" wx:if="{{authorInfo.address}}">
+          <text class="info-label">地址</text>
+          <text class="info-value">{{authorInfo.address}}</text>
+        </view>
+        <view class="info-empty" wx:if="{{authorInfo.isEmpty}}">
+          <text>这位家长很低调，暂无更多信息</text>
+        </view>
+      </block>
+      <view class="loading-view" wx:if="{{authorInfo.loading}}">
+        <text>加载中...</text>
+      </view>
+      <view class="error-view" wx:if="{{authorInfo.error}}">
+        <text>获取信息失败</text>
+      </view>
+    </view>
+
+    <view class="author-card-footer" bindtap="closeAuthorModal">
+      <text>关闭</text>
+    </view>
+  </view>
+</view>

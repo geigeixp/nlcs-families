@@ -1,0 +1,288 @@
+/* Container: remove padding to allow full-width children */
+.container {
+  padding: 0;
+  background-color: #f6f7f9;
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+  /* Fix: Override app.wxss align-items: center */
+  display: block; 
+}
+
+/* Section Title: keep some margin for readability */
+.section-title {
+  font-size: 28rpx;
+  color: #666;
+  margin: 30rpx 30rpx 20rpx 30rpx;
+  font-weight: 500;
+}
+
+/* Header Card: Full Width */
+.header-card {
+  background: linear-gradient(135deg, #1296db, #6ccef5);
+  border-radius: 0;
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(18, 150, 219, 0.3);
+}
+
+.avatar-placeholder {
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30rpx;
+  overflow: hidden;
+}
+
+.default-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.student-chinese-name {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.edit-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.label-small {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 16rpx;
+  width: 80rpx;
+}
+
+.name-input {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8rpx;
+  padding: 4rpx 16rpx;
+  color: #fff;
+  font-size: 32rpx;
+  flex: 1;
+}
+
+.name-input.english {
+  font-weight: bold;
+}
+
+.name-input.chinese {
+  font-size: 28rpx;
+}
+
+/* Info Card: Full Width */
+.info-card {
+  background: #fff;
+  border-radius: 0;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 20rpx;
+}
+
+.sibling-card {
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-left: 16rpx;
+  border-left: 8rpx solid #1296db;
+  line-height: 1;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.card-header-row .card-title {
+  margin-bottom: 0;
+}
+
+.card-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.action-btn.edit {
+  background-color: #f0f9eb;
+  color: #67c23a;
+  border: 1rpx solid #67c23a;
+}
+
+.action-btn.delete {
+  background-color: #fef0f0;
+  color: #f56c6c;
+  border: 1rpx solid #f56c6c;
+}
+
+.info-row {
+  margin-bottom: 30rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.label {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 0;
+}
+
+.help-icon {
+  margin-left: 10rpx;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+.value {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.input-value {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10rpx;
+  height: 60rpx;
+}
+
+.input-placeholder {
+  font-size: 24rpx;
+  color: #bbb;
+}
+
+/* Buttons: Keep margin */
+.add-btn {
+  background-color: #fff;
+  color: #1296db;
+  border: 2rpx dashed #1296db;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  margin: 20rpx 30rpx;
+}
+
+.save-btn {
+  margin: 40rpx 30rpx;
+  background-color: #1296db;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(18, 150, 219, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* Modal Styles */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+}
+
+.modal-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx;
+  z-index: 999;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.form-field {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  background: #f5f5f5;
+  height: 80rpx;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.form-picker {
+  background: #f5f5f5;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.modal-btn {
+  margin-top: 40rpx;
+  background-color: #1296db;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+}

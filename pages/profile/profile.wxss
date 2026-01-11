@@ -1,0 +1,212 @@
+.profile-container {
+  min-height: 100vh;
+  background-color: #f6f6f6;
+  padding-bottom: 40rpx;
+}
+
+.header {
+  background-color: #fff;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.avatar-wrap {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 30rpx;
+  background-color: #eee;
+  border: 2rpx solid #f0f0f0;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.info-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.role {
+  font-size: 26rpx;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  align-self: flex-start;
+}
+
+.contact-info-card {
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-top: 10rpx;
+}
+
+.contact-row {
+  display: flex;
+  font-size: 26rpx;
+  margin-bottom: 10rpx;
+  line-height: 1.4;
+}
+
+.contact-row:last-child {
+  margin-bottom: 0;
+}
+
+.contact-label {
+  color: #888;
+  width: 90rpx;
+  flex-shrink: 0;
+}
+
+.contact-value {
+  color: #333;
+  flex: 1;
+  word-break: break-all;
+}
+
+.menu-list {
+  background-color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  background-color: #fff;
+}
+
+.menu-item:active {
+  background-color: #f9f9f9;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.margin-top {
+  margin-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+}
+
+.iconfont {
+  font-size: 40rpx;
+  color: #1296db;
+  margin-right: 20rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.icon-list::before { content: "📋"; }
+.icon-child::before { content: "👶"; }
+.icon-settings::before { content: "⚙️"; }
+.icon-message::before { content: "🔔"; }
+
+.menu-text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.arrow {
+  color: #ccc;
+  font-size: 30rpx;
+  font-family: monospace;
+}
+
+.admin-entry {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.admin-input {
+  flex: 1;
+  height: 80rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+}
+
+.btn-switch {
+  font-size: 28rpx;
+}
+
+.btn-exit {
+  width: 100%;
+}
+
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.btn-admin {
+  width: 100%;
+  position: relative;
+  overflow: visible; /* Ensure badge is visible */
+}
+
+.badge {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background-color: #ff4d4f;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 20rpx;
+  min-width: 30rpx;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.2);
+}
+
+.red-dot {
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+  margin-left: 12rpx;
+}

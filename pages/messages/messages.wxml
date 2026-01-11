@@ -1,0 +1,35 @@
+<view class="container">
+  <block wx:for="{{messages}}" wx:key="_id">
+    <view class="msg-card" bindtap="goPost" data-id="{{item.postId}}">
+      <image class="avatar" src="{{item.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="msg-content">
+        <view class="msg-header">
+          <text class="author">{{item.author}}</text>
+          <text class="time">{{item.timeStr}}</text>
+        </view>
+        <view class="msg-detail" wx:if="{{item.type === 'comment'}}">
+          <text class="action">评论了你：</text>
+          <text class="comment-text">{{item.content}}</text>
+        </view>
+        <view class="msg-detail" wx:if="{{item.type === 'like'}}">
+          <text class="action">赞了你的帖子</text>
+        </view>
+      </view>
+      <view class="post-preview">
+        <image wx:if="{{item.postPreview.image}}" src="{{item.postPreview.image}}" mode="aspectFill" class="preview-img"></image>
+        <view wx:else class="preview-text">{{item.postPreview.content}}</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:if="{{messages.length === 0 && !isLoading}}">
+    <text>暂无新消息</text>
+  </view>
+
+  <view class="loading" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+  <view class="no-more" wx:if="{{!hasMore && messages.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+</view>

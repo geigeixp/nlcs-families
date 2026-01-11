@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="section">
+    <view class="avatar-wrapper">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{avatarUrl || '/images/default-avatar.png'}}"></image>
+        <view class="edit-icon">📷</view>
+      </button>
+      <text class="tip">点击头像修改</text>
+    </view>
+  </view>
+
+  <view class="form-group">
+    <view class="form-item">
+      <text class="label">电话</text>
+      <input class="input" placeholder="请输入电话" value="{{phone}}" data-field="phone" bindinput="onInput" type="number"/>
+    </view>
+    <view class="form-item">
+      <text class="label">Email</text>
+      <input class="input" placeholder="请输入Email" value="{{email}}" data-field="email" bindinput="onInput"/>
+    </view>
+    <view class="form-item">
+      <text class="label">住址</text>
+      <input class="input" placeholder="请输入大概住址（选填）" value="{{address}}" data-field="address" bindinput="onInput"/>
+    </view>
+  </view>
+
+  <view class="btn-area">
+    <button class="save-btn" bindtap="save" loading="{{loading}}">保存设置</button>
+  </view>
+</view>
