@@ -65,20 +65,34 @@ exports.main = async (event) => {
     // 这样能保证前几页数据的准确性。对于非常久远的历史数据，这种方式可能会有性能瓶颈，但对当前规模适用。
     const fetchLimit = page * pageSize + 20 // 多取一点
 
+    // Get last cleared time
+    let sinceDate = new Date(0)
+    try {
+      const appRes = await db.collection('applications').where({ openid: OPENID }).limit(1).get()
+      if (appRes.data.length > 0 && appRes.data[0].msgLastClearedTime) {
+         sinceDate = new Date(appRes.data[0].msgLastClearedTime)
+      } else {
+         const userRes = await db.collection('users').where({ _openid: OPENID }).limit(1).get()
+         if (userRes.data.length > 0 && userRes.data[0].msgLastClearedTime) {
+            sinceDate = new Date(userRes.data[0].msgLastClearedTime)
+         }
+      }
+    } catch(e) { console.error('Error fetching cleared time', e) }
+
     const [commentsRes, likesRes] = await Promise.all([
-      db.collection('post_comments')
+      db.collection('comments')
         .where({
           postId: _.in(postIds),
-          openid: _.neq(OPENID), // 排除自己给自己的
-          status: 'published'
+          createTime: _.gt(sinceDate)
         })
-        .orderBy('createdAt', 'desc')
+        .orderBy('createTime', 'desc')
         .limit(fetchLimit)
         .get(),
       db.collection('post_likes')
         .where({
           postId: _.in(postIds),
-          openid: _.neq(OPENID) // 排除自己给自己点赞
+          openid: _.neq(OPENID), // 排除自己给自己点赞
+          createdAt: _.gt(sinceDate)
         })
         .orderBy('createdAt', 'desc')
         .limit(fetchLimit)
@@ -90,6 +104,10 @@ exports.main = async (event) => {
 
     // 处理评论
     for (const c of (commentsRes.data || [])) {
+      // Filter out my own comments here to avoid DB query issues
+      const cOpenid = c._openid || c.openid
+      if (cOpenid === OPENID) continue
+
       messages.push({
         type: 'comment',
         _id: c._id, // 唯一标识

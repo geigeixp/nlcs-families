@@ -4,6 +4,22 @@
   background: #f6f6f6;
 }
 
+.header-actions {
+  padding: 20rpx 30rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-clear {
+  margin: 0;
+  font-size: 24rpx;
+  color: #666;
+  background: #f0f0f0;
+  border: none;
+}
+
 .msg-card {
   background: #fff;
   padding: 24rpx 30rpx;

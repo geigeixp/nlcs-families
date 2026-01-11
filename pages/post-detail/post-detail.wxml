@@ -65,15 +65,27 @@
     <view class="comments-list">
       <block wx:if="{{comments.length > 0}}">
         <view class="comment-item" wx:for="{{comments}}" wx:key="_id">
-          <image class="comment-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <image class="comment-avatar" src="{{item.avatar}}" mode="aspectFill" catchtap="showAuthorInfo" data-openid="{{item._openid || item.openid}}" data-author="{{item.author}}" data-avatar="{{item.avatar}}"></image>
           <view class="comment-content-wrapper">
             <view class="comment-header">
-              <text class="comment-author">{{item.author}}</text>
+              <text class="comment-author" catchtap="showAuthorInfo" data-openid="{{item._openid || item.openid}}" data-author="{{item.author}}" data-avatar="{{item.avatar}}">{{item.author}}</text>
               <text class="comment-time">{{item.timeDisplay}}</text>
             </view>
             <text class="comment-text">{{item.content}}</text>
-            <view class="comment-actions" wx:if="{{item.canDelete}}">
-              <text class="delete-btn" catchtap="deleteComment" data-id="{{item._id}}">删除</text>
+            
+            <view class="comment-actions-row">
+              <view class="action-text-btn {{item.isLiked ? 'liked-text' : ''}}" catchtap="toggleCommentLike" data-id="{{item._id}}" data-index="{{index}}">
+                点赞 {{item.likes || 0}}
+              </view>
+              <button class="action-text-btn" open-type="share" data-comment="{{item}}" size="mini">
+                分享
+              </button>
+              <view class="action-text-btn" wx:if="{{item.isMine}}" catchtap="startEditComment" data-id="{{item._id}}" data-content="{{item.content}}">
+                编辑
+              </view>
+              <view class="action-text-btn" wx:if="{{item.canDelete}}" catchtap="deleteComment" data-id="{{item._id}}">
+                删除
+              </view>
             </view>
           </view>
         </view>
@@ -96,14 +108,16 @@
 <!-- Comment Input Bar -->
 <view class="comment-bar" wx:if="{{post}}">
   <input class="comment-input" 
-         placeholder="说点什么..." 
+         placeholder="{{editingCommentId ? '修改评论...' : '说点什么...'}}" 
          value="{{commentInput}}" 
+         focus="{{focusInput}}"
          bindinput="onCommentInput" 
          confirm-type="send" 
          bindconfirm="submitComment"
          cursor-spacing="20"
   />
-  <view class="send-btn {{commentInput ? 'active' : ''}}" bindtap="submitComment">发送</view>
+  <view class="cancel-edit-btn" wx:if="{{editingCommentId}}" bindtap="cancelEdit">取消</view>
+  <view class="send-btn {{commentInput ? 'active' : ''}}" bindtap="submitComment">{{editingCommentId ? '更新' : '发送'}}</view>
 </view>
 
 <view class="loading-container" wx:if="{{loading}}">

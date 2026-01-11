@@ -61,6 +61,7 @@ module.exports = {
 
   <view class="card" wx:if="{{isAdmin}}">
     <button type="warn" size="mini" bindtap="onMigrateGrades" style="margin-bottom: 20rpx;">重置/迁移所有用户年级数据</button>
+    <button type="default" size="mini" bindtap="onFixClassNames" style="margin-bottom: 20rpx; margin-left: 10rpx;">清理班级名称格式</button>
     <view class="search-row">
       <input class="search-input" placeholder="搜索姓名/邮箱/电话/openid" bindinput="onApprovedKeywordInput" value="{{approvedKeyword}}" />
       <button class="btn-more" size="mini" bindtap="loadMoreApproved" disabled="{{!approvedHasMore || approvedLoading}}">加载更多</button>

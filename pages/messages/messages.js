@@ -15,6 +15,14 @@ Page({
     this.markAsRead()
   },
 
+  onUnload() {
+    this.markAsRead()
+  },
+  
+  onHide() {
+    this.markAsRead()
+  },
+
   markAsRead() {
     // 简单实现：记录当前时间为"最后查看时间"
     // 下次计算未读时，只计算这个时间之后的
@@ -47,6 +55,16 @@ Page({
           timeStr: this.formatTime(item.createdAt)
         }))
         
+        // Update last seen time to the latest message time to handle clock skew
+        let maxTime = Date.now()
+        list.forEach(item => {
+          const t = new Date(item.createdAt).getTime()
+          if (t > maxTime) maxTime = t
+        })
+        // Add a small buffer (1s) to ensure we cover the latest message
+        wx.setStorageSync('nlcs_last_seen_interactions', maxTime + 1000)
+        app.markInteractionsSeen && app.markInteractionsSeen()
+
         this.setData({
           messages: reset ? list : [...this.data.messages, ...list],
           page: this.data.page + 1,
@@ -74,6 +92,34 @@ Page({
     if (!postId) return
     wx.navigateTo({
       url: `/pages/post/post?id=${postId}`
+    })
+  },
+
+  onClearAll() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要清除所有消息吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '清除中' })
+          wx.cloud.callFunction({
+            name: 'clearMessages'
+          }).then(res => {
+            wx.hideLoading()
+            if (res.result && res.result.success) {
+              this.setData({ messages: [], page: 1, hasMore: false })
+              this.markAsRead() // Update local read status too
+              wx.showToast({ title: '已清除' })
+            } else {
+              wx.showToast({ title: '清除失败', icon: 'none' })
+            }
+          }).catch(err => {
+            wx.hideLoading()
+            console.error(err)
+            wx.showToast({ title: '清除失败', icon: 'none' })
+          })
+        }
+      }
     })
   },
 

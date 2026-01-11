@@ -17,7 +17,11 @@ page {
 }
 
 .header-spacer {
-  height: 240rpx; /* Adjust based on header height */
+  height: 120rpx; /* Default height for unapproved state (only topbar) */
+}
+
+.header-spacer.header-spacer-approved {
+  height: 360rpx; /* Increased height for approved state (topbar + filters) to prevent overlap */
 }
 
 /* Feed Topbar */
@@ -98,26 +102,22 @@ page {
 
 .filter-row {
   display: flex;
-  padding: 0 30rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
   gap: 16rpx;
 }
 
 .pill.small {
+  margin-right: 0;
   padding: 6rpx 20rpx;
   font-size: 24rpx;
 }
 
-/* Feed List */
-.feed-container {
-  min-height: 100vh;
-}
-
+/* Card Styles */
 .card {
   background: #fff;
-  margin: 20rpx 30rpx;
+  margin-bottom: 20rpx;
   padding: 30rpx;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.03);
 }
 
 .card-header {
@@ -130,6 +130,7 @@ page {
 .header-left {
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .avatar {
@@ -165,7 +166,7 @@ page {
 .post-edit, .post-delete {
   font-size: 24rpx;
   color: #576b95;
-  padding: 10rpx;
+  padding: 10rpx 0;
 }
 
 .card-content {
@@ -187,15 +188,12 @@ page {
 .link-text {
   color: #576b95;
   text-decoration: underline;
-  word-break: break-all;
+  margin: 0 4rpx;
 }
 
 .highlight-text {
-  background-color: #fff3bf; /* Yellow highlight background */
-  color: #333;
+  color: #e53935; /* Red highlight color */
   font-weight: bold;
-  border-radius: 4rpx;
-  padding: 0 2rpx;
 }
 
 /* Image Grid */
@@ -246,6 +244,24 @@ page {
 .action-text.liked {
   color: #1296db;
   font-weight: 600;
+}
+
+.share-wrapper {
+  margin-left: 24rpx;
+}
+
+.share-btn-inline {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: 1.2;
+  font-size: 26rpx;
+  color: #666;
+  border: none;
+}
+
+.share-btn-inline::after {
+  border: none;
 }
 
 .loading-tip {
@@ -306,6 +322,16 @@ page {
 }
 
 /* Author Modal */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
 .author-modal {
   position: fixed;
   top: 50%;
@@ -400,22 +426,4 @@ page {
   font-size: 30rpx;
   color: #576b95;
   font-weight: 500;
-}
-
-.share-wrapper {
-  margin-left: 24rpx;
-}
-
-.share-btn-inline {
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  line-height: 1.2;
-  font-size: 26rpx;
-  color: #666;
-  border: none;
-}
-
-.share-btn-inline::after {
-  border: none;
 }

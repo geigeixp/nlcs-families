@@ -103,7 +103,8 @@ App({
   },
   markInteractionsSeen() {
     wx.setStorageSync('nlcs_last_seen_interactions', Date.now())
-    wx.hideTabBarRedDot({ index: 3 }).catch(() => {})
+    // Re-check unread status (e.g. for admin pending tasks)
+    this.refreshUnread()
   },
   globalData: {
     userInfo: null,

@@ -148,7 +148,12 @@ Page({
 
   onSiblingInput(e) {
     const field = e.currentTarget.dataset.field
-    const value = e.detail.value
+    let value = e.detail.value
+    
+    if (field === 'currentClass') {
+      value = this.formatClassInput(value)
+    }
+
     this.setData({
       [`siblingForm.${field}`]: value
     })
@@ -247,8 +252,22 @@ Page({
     })
   },
 
+  formatClassInput(value) {
+    if (!value) return ''
+    // Uppercase first
+    let val = String(value).toUpperCase()
+    // Remove 'G' or 'GRADE' followed by digit
+    // e.g. "G7C" -> "7C", "Grade 7C" -> "7C"
+    val = val.replace(/^G(?:RADE)?\s*(\d)/, '$1')
+    return val
+  },
+
   onCurrentClassInput(e) {
-    this.setData({ currentClass: e.detail.value })
+    const val = this.formatClassInput(e.detail.value)
+    // If formatted value is different from input, we need to set it to update the view
+    // Note: in WeChat Mini Program, setting the same value might not trigger update if cursor position is involved,
+    // but here we are changing the value (removing 'G'), so it should be fine.
+    this.setData({ currentClass: val })
   },
 
   showClassHelp() {

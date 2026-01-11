@@ -6,7 +6,7 @@ const db = cloud.database()
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
-  const postId = String(event.postId || '').trim()
+  const postId = String(event.postId || event.id || '').trim()
 
   if (!postId) {
     return { ok: false, message: 'missing_postId' }

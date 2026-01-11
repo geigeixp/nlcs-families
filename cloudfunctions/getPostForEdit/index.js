@@ -36,8 +36,12 @@ exports.main = async (event) => {
     const post = postRes && postRes.data ? postRes.data : null
     if (!post) return { ok: false, message: 'not_found' }
 
+    // Check if user is admin
+    const adminRes = await db.collection('admins').where({ openid: OPENID }).limit(1).get()
+    const isAdmin = adminRes.data && adminRes.data.length > 0
+
     const isOwner = post._openid === OPENID || post.openid === OPENID
-    if (!isOwner) return { ok: false, message: 'forbidden' }
+    if (!isOwner && !isAdmin) return { ok: false, message: 'forbidden' }
 
     const images = Array.isArray(post.images) ? post.images : []
     const urlMap = await getTempUrlMap(images)

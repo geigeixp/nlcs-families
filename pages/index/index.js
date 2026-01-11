@@ -403,7 +403,7 @@ Page({
   editPost(e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: `/pages/post/post?id=${id}`
+      url: `/pages/edit-post/edit-post?id=${id}`
     })
   },
 
@@ -417,10 +417,10 @@ Page({
           wx.showLoading({ title: '删除中' })
           wx.cloud.callFunction({
             name: 'deletePost',
-            data: { id }
+            data: { postId: id }
           }).then(res => {
             wx.hideLoading()
-            if (res.result.success) {
+            if (res.result.success || res.result.ok) {
               wx.showToast({ title: '已删除' })
               // Remove from list
               const posts = this.data.posts.filter(p => p._id !== id)
@@ -503,7 +503,7 @@ Page({
       name: 'getPublicProfile',
       data: { targetOpenid: openid }
     }).then(res => {
-      if (res.result.success) {
+      if (res.result && (res.result.ok || res.result.success)) {
         const data = res.result.data || {}
         const isEmpty = !data.childName && !data.admissionYear && !data.entryGradeAtEntry && !data.phone && !data.email && !data.address && !data.currentClass
         

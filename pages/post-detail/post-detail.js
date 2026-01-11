@@ -9,6 +9,8 @@ Page({
     comments: [],
     loadingComments: false,
     commentInput: '',
+    editingCommentId: null,
+    focusInput: false,
     showAuthorModal: false,
     authorInfo: {},
     isAdmin: false
@@ -56,6 +58,61 @@ Page({
       console.error(err)
       this.setData({ loadingComments: false })
     })
+  },
+
+  toggleCommentLike(e) {
+    const id = e.currentTarget.dataset.id
+    const index = e.currentTarget.dataset.index
+    const comments = this.data.comments
+    const comment = comments[index]
+    
+    if (!comment) return
+
+    const newLiked = !comment.isLiked
+    const newLikes = newLiked ? (comment.likes || 0) + 1 : Math.max(0, (comment.likes || 0) - 1)
+
+    // Optimistic update
+    const key = `comments[${index}]`
+    this.setData({
+      [key + '.isLiked']: newLiked,
+      [key + '.likes']: newLikes
+    })
+
+    wx.cloud.callFunction({
+      name: 'toggleCommentLike',
+      data: { commentId: id }
+    }).then(res => {
+        if (!res.result || !res.result.success) {
+            // Revert on failure
+             this.setData({
+                [key + '.isLiked']: !newLiked,
+                [key + '.likes']: comment.likes
+            })
+        }
+    }).catch(err => {
+         this.setData({
+            [key + '.isLiked']: !newLiked,
+            [key + '.likes']: comment.likes
+        })
+    })
+  },
+
+  startEditComment(e) {
+      const id = e.currentTarget.dataset.id
+      const content = e.currentTarget.dataset.content
+      this.setData({
+          commentInput: content,
+          editingCommentId: id,
+          focusInput: true
+      })
+  },
+
+  cancelEdit() {
+      this.setData({
+          commentInput: '',
+          editingCommentId: null,
+          focusInput: false
+      })
   },
 
   deleteComment(e) {
@@ -240,6 +297,35 @@ Page({
     const content = this.data.commentInput.trim()
     if (!content) return
     
+    // Handle Edit
+    if (this.data.editingCommentId) {
+        wx.showLoading({ title: '更新中' })
+        wx.cloud.callFunction({
+            name: 'updateComment',
+            data: {
+                commentId: this.data.editingCommentId,
+                content: content
+            }
+        }).then(res => {
+            wx.hideLoading()
+            if (res.result && res.result.success) {
+                wx.showToast({ title: '更新成功' })
+                this.setData({
+                    commentInput: '',
+                    editingCommentId: null,
+                    focusInput: false
+                })
+                this.loadComments()
+            } else {
+                 wx.showToast({ title: '更新失败', icon: 'none' })
+            }
+        }).catch(err => {
+            wx.hideLoading()
+            wx.showToast({ title: '更新出错', icon: 'none' })
+        })
+        return
+    }
+
     const data = {
       postId: this.postId,
       content
@@ -301,7 +387,13 @@ Page({
   
   showAuthorInfo(e) {
      const { openid, author, avatar } = e.currentTarget.dataset
-    if (!openid) return
+    if (!openid) {
+      wx.showToast({
+        title: '无法获取用户信息',
+        icon: 'none'
+      })
+      return
+    }
 
     this.setData({
       showAuthorModal: true,

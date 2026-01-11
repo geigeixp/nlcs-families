@@ -198,6 +198,38 @@ Page({
     })
   },
 
+  onFixClassNames() {
+    wx.showModal({
+      title: '确认',
+      content: '确定要清理所有班级名称格式（移除G/Grade前缀）吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '处理中' })
+          wx.cloud.callFunction({
+            name: 'fixClassNames'
+          }).then(res => {
+            wx.hideLoading()
+            if (res.result.ok) {
+              wx.showModal({
+                title: '处理完成',
+                content: res.result.message,
+                showCancel: false
+              })
+              // Reload to see changes
+              this.loadApproved(true)
+            } else {
+              wx.showToast({ title: res.result.error || '失败', icon: 'none' })
+            }
+          }).catch(err => {
+            wx.hideLoading()
+            wx.showToast({ title: '调用失败', icon: 'none' })
+            console.error(err)
+          })
+        }
+      }
+    })
+  },
+
   applyApprovedFilter() {
     const q = String(this.data.approvedKeyword || '').trim().toLowerCase()
     const raw = this.data.approvedRaw || []

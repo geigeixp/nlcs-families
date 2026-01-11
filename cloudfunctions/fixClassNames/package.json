@@ -1,0 +1,9 @@
+{
+  "name": "fixClassNames",
+  "version": "1.0.0",
+  "description": "Fix class names in applications collection",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

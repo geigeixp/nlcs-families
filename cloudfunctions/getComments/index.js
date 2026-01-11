@@ -4,14 +4,34 @@ const db = cloud.database()
 const _ = db.command
 
 // Helper to build display name from application data
+function buildDisplayName(student, siblings = []) {
+  if (!student) return ''
+  let name = student.englishName || student.chineseName || '家长'
+
+  // Add siblings
+  if (Array.isArray(siblings) && siblings.length > 0) {
+    const siblingNames = siblings.map(s => {
+      return s.englishName || s.chineseName || ''
+    }).filter(n => n)
+    
+    if (siblingNames.length > 0) {
+      name += ` & ${siblingNames.join(' & ')}`
+    }
+  }
+
+  const relationRaw = String(student.relation || '').trim()
+  const relation = relationRaw === '其他' ? String(student.relationOther || '').trim() : relationRaw
+  const relationText = relation === '父亲' ? '爸爸' : (relation === '母亲' ? '妈妈' : relation)
+  if (relationText) {
+    name += ` ${relationText}`
+  }
+  return name
+}
+
 function getAuthorName(app) {
   if (!app) return 'Anonymous'
   if (app.student) {
-    let name = app.student.englishName || app.student.name || 'Parent'
-    if (app.student.chineseName) {
-      name += ` (${app.student.chineseName})`
-    }
-    return name
+    return buildDisplayName(app.student, app.siblings)
   } else if (app.profile) {
     return app.profile.nickName || 'Parent'
   }
@@ -80,6 +100,23 @@ exports.main = async (event, context) => {
         }
     } catch(e) {}
 
+    // 4.5 Check liked status
+    let likedCommentIds = new Set()
+    if (comments.length > 0) {
+      try {
+        const commentIds = comments.map(c => c._id)
+        const likeRes = await db.collection('comment_likes')
+          .where({
+            commentId: _.in(commentIds),
+            openid: OPENID
+          })
+          .get()
+        likeRes.data.forEach(like => likedCommentIds.add(like.commentId))
+      } catch (e) {
+        console.error('Error fetching comment likes:', e)
+      }
+    }
+
     // 5. Merge user info and format comments
     comments = comments.map(comment => {
       const app = userMap[comment._openid]
@@ -96,6 +133,7 @@ exports.main = async (event, context) => {
 
       comment.isMine = comment._openid === OPENID
       comment.canDelete = isAdmin || comment.isMine
+      comment.isLiked = likedCommentIds.has(comment._id)
       return comment
     })
 

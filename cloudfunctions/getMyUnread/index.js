@@ -9,6 +9,7 @@ exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
   const perPostSince = (event && event.perPostSince && typeof event.perPostSince === 'object') ? event.perPostSince : null
   let since = Number(event && event.since ? event.since : 0) || 0
+  
   if (perPostSince) {
     const times = Object.values(perPostSince)
       .map(x => Number(x) || 0)
@@ -18,6 +19,18 @@ exports.main = async (event) => {
   const sinceDate = new Date(since)
 
   try {
+    // Check admin pending count
+    let pendingCount = 0
+    try {
+      const adminRes = await db.collection('admins').where({ openid: OPENID }).limit(1).get()
+      if (adminRes.data && adminRes.data.length > 0) {
+        const pendingRes = await db.collection('applications').where({ status: 'pending' }).count()
+        pendingCount = pendingRes.total || 0
+      }
+    } catch (e) {
+      console.error('Check admin pending failed', e)
+    }
+
     const postsRes = await db.collection('posts')
       .where(_.and([
         _.or([
@@ -32,7 +45,15 @@ exports.main = async (event) => {
 
     const postIds = (postsRes.data || []).map(p => p._id).filter(Boolean)
     if (!postIds.length) {
-      return { ok: true, hasUnread: false, likes: 0, comments: 0, perPost: {} }
+      return { 
+        ok: true, 
+        hasUnread: pendingCount > 0, 
+        hasUnreadMessages: false,
+        likes: 0, 
+        comments: 0, 
+        pendingCount, 
+        perPost: {} 
+      }
     }
 
     const likesRes = await db.collection('post_likes')
@@ -44,12 +65,11 @@ exports.main = async (event) => {
       .limit(500)
       .get()
 
-    const commentsRes = await db.collection('post_comments')
+    const commentsRes = await db.collection('comments')
       .where({
         postId: _.in(postIds),
-        openid: _.neq(OPENID),
-        status: 'published',
-        createdAt: _.gt(sinceDate)
+        _openid: _.neq(OPENID),
+        createTime: _.gt(sinceDate)
       })
       .limit(500)
       .get()
@@ -76,7 +96,7 @@ exports.main = async (event) => {
       const pid = x.postId
       if (!pid) continue
       if (perPostSince && perPostSince[pid]) {
-        const createdAtMs = (x.createdAt instanceof Date) ? x.createdAt.getTime() : new Date(x.createdAt).getTime()
+        const createdAtMs = (x.createTime instanceof Date) ? x.createTime.getTime() : new Date(x.createTime).getTime()
         if (!(createdAtMs > Number(perPostSince[pid] || 0))) continue
       }
       if (!perPost[pid]) perPost[pid] = { likes: 0, comments: 0, total: 0 }
@@ -87,9 +107,11 @@ exports.main = async (event) => {
 
     return {
       ok: true,
-      hasUnread: likes + comments > 0,
+      hasUnread: (likes + comments > 0) || (pendingCount > 0),
+      hasUnreadMessages: (likes + comments > 0),
       likes,
       comments,
+      pendingCount,
       perPost
     }
   } catch (err) {

@@ -1,4 +1,8 @@
 <view class="container">
+  <view class="header-actions" wx:if="{{messages.length > 0}}">
+    <button class="btn-clear" size="mini" bindtap="onClearAll">一键清除消息</button>
+  </view>
+
   <block wx:for="{{messages}}" wx:key="_id">
     <view class="msg-card" bindtap="goPost" data-id="{{item.postId}}">
       <image class="avatar" src="{{item.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>

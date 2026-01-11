@@ -199,9 +199,9 @@ exports.main = async (event) => {
       }))
 
       // Search comments
-      const commentRes = await db.collection('post_comments')
+      const commentRes = await db.collection('comments')
         .where(_.and([
-          { status: 'published' },
+          { status: _.neq('deleted') },
           _.or(commentConditions)
         ]))
         .limit(1000)
@@ -329,11 +329,17 @@ exports.main = async (event) => {
       // 如果有关键词，查询匹配的评论内容
       let matchingCommentsMap = {}
       if (keyword) {
-        const matchedCommentsRes = await db.collection('post_comments')
+        // Use enhanced keyword extraction for comment matching too
+        const keywords = extractKeywords(keyword)
+        const commentConditions = keywords.map(k => ({
+          content: db.RegExp({ regexp: escapeRegExp(k), options: 'i' })
+        }))
+
+        const matchedCommentsRes = await db.collection('comments')
           .where(_.and([
             { postId: _.in(postIds) },
-            { status: 'published' },
-            { content: db.RegExp({ regexp: keyword, options: 'i' }) }
+            { status: _.neq('deleted') },
+            _.or(commentConditions)
           ]))
           .limit(100) // 每个页面最多显示100条匹配评论，足够了
           .field({ postId: true, content: true, author: true })

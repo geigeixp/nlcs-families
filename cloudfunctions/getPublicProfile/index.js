@@ -15,7 +15,7 @@ function buildChildName(student) {
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
-  const targetOpenid = String(event && event.openid ? event.openid : '').trim()
+  const targetOpenid = String(event.targetOpenid || event.openid || '').trim()
 
   if (!targetOpenid) return { ok: false, message: 'missing_openid' }
 

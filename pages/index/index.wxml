@@ -27,7 +27,7 @@
     </view>
   </view>
   
-  <view class="header-spacer"></view>
+  <view class="header-spacer {{approved ? 'header-spacer-approved' : ''}}"></view>
 
   <view class="gated-tip" wx:if="{{!approved}}">
     <text>审核通过后才能查看社群内容</text>

@@ -25,30 +25,20 @@ Page({
     app.refreshSession().finally(() => {
       this.refresh()
       app.refreshUnread().then(res => {
-        const r = res && res.result ? res.result : {}
+        // app.refreshUnread already returns the result object (unwrapped)
+        const r = res || {}
         if (r.ok) {
-          this.setData({ hasUnread: r.hasUnread })
+          this.setData({
+            hasUnread: r.hasUnread,
+            hasUnreadMessages: r.hasUnreadMessages || false,
+            pendingCount: (r.pendingCount !== undefined) ? r.pendingCount : this.data.pendingCount
+          })
         }
       })
-      this.checkPendingCount()
     })
   },
 
-  checkPendingCount() {
-    const role = wx.getStorageSync('nlcs_user_role') || 'user'
-    if (role === 'admin') {
-      wx.cloud.callFunction({
-        name: 'listApplications',
-        data: { status: 'pending', limit: 50 }
-      }).then(res => {
-        const result = res.result || {}
-        const list = result.applications || []
-        this.setData({ pendingCount: list.length })
-      }).catch(err => {
-        console.error('Failed to check pending count', err)
-      })
-    }
-  },
+  /* checkPendingCount removed as it is merged into getMyUnread */
 
   refresh() {
     const role = wx.getStorageSync('nlcs_user_role') || 'user'
