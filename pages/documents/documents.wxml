@@ -1,12 +1,12 @@
-<view class="container">
-  <view class="header">
+<view class="container {{keyword ? 'container-searching' : ''}}">
+  <view class="header" wx:if="{{!keyword}}">
     <text class="title">共享文档</text>
     <text class="subtitle">学校日历、通知及常用表格</text>
     <text class="subtitle" wx:if="{{isAdmin}}" style="font-size: 22rpx; color: #aaa; margin-top: 6rpx;">(支持图片、文档、视频、音频等，单个文件大小不超过50M)</text>
   </view>
 
   <!-- 搜索框 -->
-  <view class="search-bar">
+  <view class="search-bar" class="{{keyword ? 'search-bar-active' : 'search-bar'}}">
     <view class="search-wrap">
       <icon type="search" size="16" color="#999"></icon>
       <input class="search-input" placeholder="搜索文档名称" value="{{keyword}}" bindinput="onSearchInput" confirm-type="search"/>

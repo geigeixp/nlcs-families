@@ -113,18 +113,41 @@ page {
   font-size: 24rpx;
 }
 
-/* Card Styles */
+/* 瀑布流容器 */
+.feed-container {
+  padding: 0 20rpx;
+}
+
+/* 瀑布流网格布局 - 双列卡片 */
+.cards-grid {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10rpx;
+}
+
+.card-column {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Styles - 优化为瀑布流卡片 */
 .card {
   background: #fff;
   margin-bottom: 20rpx;
-  padding: 30rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
+/* 卡片悬停效果（虽然小程序不支持hover，但保留结构） */
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20rpx;
+  padding: 20rpx 20rpx 0;
+  margin-bottom: 16rpx;
 }
 
 .header-left {
@@ -134,28 +157,32 @@ page {
 }
 
 .avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 60rpx;
+  height: 60rpx;
   border-radius: 50%;
-  margin-right: 20rpx;
-  background: #eee;
+  margin-right: 16rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2rpx solid #fff;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .username {
-  font-size: 30rpx;
+  font-size: 26rpx;
   font-weight: 600;
   color: #333;
+  line-height: 1.2;
 }
 
 .time {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #999;
-  margin-top: 4rpx;
+  margin-top: 6rpx;
 }
 
 .header-right {
@@ -170,19 +197,30 @@ page {
 }
 
 .card-content {
-  margin-bottom: 20rpx;
+  padding: 0 20rpx;
+  margin-bottom: 16rpx;
 }
 
 .category-tag {
-  color: #1296db;
-  margin-right: 10rpx;
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  margin-bottom: 12rpx;
   font-weight: 500;
 }
 
 .content-text {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.7;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .link-text {
@@ -196,53 +234,66 @@ page {
   font-weight: bold;
 }
 
-/* Image Grid */
+/* Image Grid - 瀑布流优化 */
 .card-images {
-  margin-bottom: 20rpx;
+  margin-bottom: 0;
 }
 
 .image-grid {
   display: grid;
-  gap: 10rpx;
+  gap: 8rpx;
 }
 
-.grid-1 { grid-template-columns: 1fr; }
-.grid-2 { grid-template-columns: 1fr 1fr; }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-1 {
+  grid-template-columns: 1fr;
+}
+.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
 
 .post-image {
-  border-radius: 8rpx;
+  border-radius: 0;
   width: 100%;
-  height: 220rpx; /* Default height for grid items */
+  height: auto; /* 自适应高度，保持图片比例 */
+  min-height: 200rpx;
   object-fit: cover;
 }
 
+/* 单图在瀑布流中全宽显示 */
 .grid-1 .post-image {
-  height: 400rpx; /* Larger height for single image */
-  width: 70%; /* Not full width for single image usually */
+  width: 100%;
+  height: auto;
+  min-height: 300rpx;
+  max-height: 600rpx;
 }
 
 .card-footer {
   display: flex;
-  justify-content: flex-end;
-  border-top: 1rpx solid #f0f0f0;
-  padding-top: 20rpx;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20rpx;
+  border-top: 1rpx solid #f5f5f5;
+  background: #fafafa;
 }
 
 .action-item {
   display: flex;
   align-items: center;
-  margin-left: 24rpx;
+  justify-content: center;
+  flex: 1;
 }
 
 .action-text {
-  font-size: 26rpx;
-  color: #666;
+  font-size: 24rpx;
+  color: #999;
   white-space: nowrap;
 }
 
 .action-text.liked {
-  color: #1296db;
+  color: #ff4757;
   font-weight: 600;
 }
 
