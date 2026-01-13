@@ -266,7 +266,7 @@
 
 .btn-exit {
   width: 100%;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #e6e0e0 0%, #ebccd1 100%);
   border: none;
   border-radius: 12rpx;
 }
