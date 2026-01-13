@@ -12,65 +12,72 @@ page {
   padding: 0; /* Fix: Override app.wxss padding */
 }
 
-/* Search Bar */
+/* Search Bar - 优化设计 */
 .search-bar {
-  width: 100%; /* Ensure full width */
-  background: #fff;
-  padding: 12px 8px; /* Reduced side padding */
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20rpx;
   display: flex;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-sizing: border-box; /* Include padding in width */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
 }
 
 .search-input-wrap {
   flex: 1;
-  background: #f5f7fa;
-  border-radius: 20px;
-  height: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 48rpx;
+  height: 72rpx;
   display: flex;
   align-items: center;
-  padding: 0 12px;
-  margin-right: 12px;
+  padding: 0 24rpx;
+  margin-right: 16rpx;
   transition: all 0.3s;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
 }
 
 .search-input-wrap:active {
-    background: #eef1f5;
+  background: #fff;
+  transform: scale(0.98);
 }
 
 .search-input-wrap icon {
-  margin-right: 8px;
+  margin-right: 12rpx;
   opacity: 0.6;
 }
 
 .search-input-wrap input {
   flex: 1;
-  font-size: 14px;
+  font-size: 28rpx;
   color: #333;
 }
 
 .search-btn {
-  font-size: 15px;
-  color: #1296db;
-  padding: 4px 8px;
-  font-weight: 500;
+  font-size: 28rpx;
+  color: #fff;
+  padding: 8rpx 20rpx;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 36rpx;
+  backdrop-filter: blur(10rpx);
 }
 
-/* Filters */
+/* Filters - 优化设计 */
 .filters {
-  width: 100%; /* Ensure full width */
+  width: 100%;
   background: #fff;
   display: flex;
   border-bottom: 1rpx solid #f0f0f0;
-  height: 48px;
-  align-items: stretch; /* Fix: stretch items to fill height */
+  height: 88rpx;
+  align-items: stretch;
   z-index: 99;
   box-sizing: border-box;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  position: sticky;
+  top: 112rpx;
 }
 
 .filters picker {
@@ -84,16 +91,18 @@ page {
 }
 
 .filters .filter-item {
-  width: 100%; /* Fill parent (picker or flex item) */
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 2px;
+  padding: 0 8rpx;
   box-sizing: border-box;
   text-align: center;
-  font-size: 14px;
+  font-size: 26rpx;
   color: #333;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 /* Direct filter item (Class Input) needs flex: 1 like picker */
@@ -121,7 +130,9 @@ page {
 }
 
 .filter-item.active {
-  color: #1296db;
+  color: #667eea;
+  font-weight: 600;
+  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.05), rgba(102, 126, 234, 0.08));
 }
 
 .arrow {
@@ -163,30 +174,47 @@ page {
 
 .student-card {
   background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  transition: transform 0.1s;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
+  transition: all 0.2s;
+  border: 2rpx solid transparent;
 }
 
 .student-card:active {
-    transform: scale(0.99);
+  transform: translateY(-4rpx);
+  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.12);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
 .card-left {
-    margin-right: 16px;
+  margin-right: 24rpx;
+  position: relative;
+}
+
+.card-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24rpx;
+  height: 24rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  border: 3rpx solid #fff;
 }
 
 .avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #f0f0f0;
-    border: 1rpx solid rgba(0,0,0,0.05);
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 3rpx solid #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.15);
 }
 
 .card-right {
@@ -202,41 +230,45 @@ page {
 }
 
 .student-name {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 32rpx;
+  font-weight: 700;
   color: #222;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-right: 8px;
+  margin-right: 12rpx;
+  letter-spacing: 0.5rpx;
 }
 
 .student-class.tag {
-  font-size: 11px;
-  color: #1296db;
-  background: rgba(18, 150, 219, 0.08);
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 500;
+  font-size: 22rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
   flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
 }
 
 .card-info {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.5;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.8;
+  margin-top: 8rpx;
 }
 
 .info-item {
-    margin-bottom: 2px;
-    display: flex;
-    align-items: center;
+  margin-bottom: 4rpx;
+  display: flex;
+  align-items: center;
 }
 
 .info-item .label {
-    color: #999;
-    margin-right: 6px;
-    min-width: 32px;
+  color: #999;
+  margin-right: 8rpx;
+  min-width: 64rpx;
+  font-weight: 500;
 }
 
 .empty-tip, .loading-tip, .no-more-tip {
