@@ -91,7 +91,7 @@ Page({
     const postId = e.currentTarget.dataset.id
     if (!postId) return
     wx.navigateTo({
-      url: `/pages/post/post?id=${postId}`
+      url: `/pages/post-detail/post-detail?id=${postId}`
     })
   },
 

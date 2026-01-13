@@ -2,7 +2,9 @@
   <view class="fixed-header">
     <view class="feed-topbar">
       <text class="feed-title">社群</text>
-      <button class="feed-post-btn" size="mini" bindtap="goPost" disabled="{{!approved}}">发布</button>
+      <view class="feed-post-btn-wrapper">
+        <button class="feed-post-btn" bindtap="goPost" disabled="{{!approved}}">发布</button>
+      </view>
     </view>
     <view class="feed-filters" wx:if="{{approved}}">
       <view class="search-bar">
@@ -68,13 +70,13 @@
       <!-- 内容：图片 -->
       <view class="card-images" wx:if="{{item.images.length > 0}}">
         <view class="image-grid grid-{{item.images.length === 1 ? '1' : (item.images.length === 2 || item.images.length === 4) ? '2' : '3'}}">
-          <block wx:for="{{item.images}}" wx:for-item="img" wx:key="*this">
-            <image 
-              class="post-image" 
-              src="{{img}}" 
-              mode="aspectFill" 
-              catchtap="previewImage" 
-              data-current="{{img}}" 
+          <block wx:for="{{item.thumbnailImages || item.images}}" wx:for-item="img" wx:for-index="imgIdx" wx:key="*this">
+            <image
+              class="post-image"
+              src="{{img}}"
+              mode="aspectFill"
+              catchtap="previewImage"
+              data-current="{{item.images[imgIdx]}}"
               data-urls="{{item.images}}">
             </image>
           </block>
