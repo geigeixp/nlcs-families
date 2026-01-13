@@ -89,12 +89,16 @@ Page({
         approved: ok
       })
       app.refreshUnread()
-      
+
       if (ok) {
         this.loadPosts(true)
         this.checkStudentInfo()
       } else {
+        // 未审核用户自动跳转到审核状态页面
         this.setData({ posts: [] }) // Clear posts if not approved
+        wx.redirectTo({
+          url: '/pages/status/status'
+        })
       }
     })
   },
