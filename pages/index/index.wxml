@@ -2,7 +2,9 @@
   <view class="fixed-header">
     <view class="feed-topbar">
       <text class="feed-title">社群</text>
-      <button class="feed-post-btn" size="mini" bindtap="goPost" disabled="{{!approved}}">发布</button>
+      <view class="feed-post-btn-wrapper">
+        <button class="feed-post-btn" bindtap="goPost" disabled="{{!approved}}">发布</button>
+      </view>
     </view>
     <view class="feed-filters" wx:if="{{approved}}">
       <view class="search-bar">

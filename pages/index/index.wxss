@@ -37,17 +37,34 @@ page {
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
+  flex: 0 0 auto;
+}
+
+.feed-post-btn-wrapper {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .feed-post-btn {
-  background: #1296db;
-  color: #fff;
-  font-size: 26rpx;
-  padding: 0 30rpx;
-  height: 56rpx;
-  line-height: 56rpx;
-  border-radius: 28rpx;
-  margin: 0;
+  background: #1296db !important;
+  color: #fff !important;
+  font-size: 30rpx !important;
+  padding: 12rpx 32rpx !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+  border-radius: 32rpx !important;
+  margin: 0 !important;
+  min-width: 120rpx;
+  width: auto;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.feed-post-btn::after {
+  border: none !important;
 }
 
 /* Filters Area */
