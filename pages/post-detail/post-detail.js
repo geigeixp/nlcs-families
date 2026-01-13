@@ -1,6 +1,6 @@
 const app = getApp()
 const { parseTextLinks, normalizeUrl } = require('../../utils/linkify')
-const { formatTimeAgo } = require('../../utils/util.js')
+const { formatTimeAgo, getCompressedImageUrl } = require('../../utils/util.js')
 
 Page({
   data: {
@@ -162,19 +162,31 @@ Page({
         const role = wx.getStorageSync('nlcs_user_role') || 'user'
         const postOpenid = post.openid || post._openid
         const isOwner = Boolean(myOpenid && postOpenid && postOpenid === myOpenid)
-        
+
         post.time = formatTimeAgo(post.createTime)
         post.canEdit = isOwner
         post.canDelete = role === 'admin' || isOwner
-        
+
         // Process content links
         if (post.content) {
           post.contentParts = parseTextLinks(post.content)
         }
 
-        this.setData({ 
+        // Ensure images is an array
+        if (!post.images || !Array.isArray(post.images)) {
+          post.images = []
+        }
+
+        // Compress images for detail view (thumbnail)
+        if (post.images.length > 0) {
+          post.thumbnailImages = post.images.map(img =>
+            getCompressedImageUrl(img, { width: 600, quality: 85 })
+          )
+        }
+
+        this.setData({
           post: post,
-          loading: false 
+          loading: false
         })
       } else {
         this.setData({ loading: false })

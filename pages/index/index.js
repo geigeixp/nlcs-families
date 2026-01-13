@@ -1,5 +1,6 @@
 const app = getApp()
 const { parseTextLinks, normalizeUrl } = require('../../utils/linkify')
+const { getCompressedImageUrl } = require('../../utils/util')
 
 // Helper to escape regex special characters
 function escapeRegExp(string) {
@@ -247,7 +248,7 @@ Page({
           item.time = this.formatTime(new Date(item.createTime))
           item.canEdit = isOwner
           item.canDelete = role === 'admin' || isOwner
-          
+
           // Process content with highlight
           let parts = parseTextLinks(item.content || '')
           item.contentParts = highlightContent(parts, keyword)
@@ -259,6 +260,13 @@ Page({
               mc.contentParts = highlightContent(mcParts, keyword)
               return mc
             })
+          }
+
+          // Compress images for list view (thumbnail)
+          if (item.images && item.images.length > 0) {
+            item.thumbnailImages = item.images.map(img =>
+              getCompressedImageUrl(img, { width: 400, quality: 80 })
+            )
           }
 
           return item

@@ -46,7 +46,38 @@ const formatTimeAgo = date => {
   }
 }
 
+/**
+ * 为微信云存储图片添加缩略图参数
+ * @param {string} url - 原始图片URL
+ * @param {object} options - 压缩选项
+ * @param {number} options.width - 目标宽度（默认：400）
+ * @param {number} options.quality - 图片质量 1-100（默认：80）
+ * @returns {string} 压缩后的图片URL
+ */
+const getCompressedImageUrl = (url, options = {}) => {
+  if (!url || typeof url !== 'string') return url
+
+  // 只处理微信云存储的图片
+  if (!url.startsWith('cloud://') && !url.includes('tcb.qcloud.la')) {
+    return url
+  }
+
+  const { width = 400, quality = 80 } = options
+
+  // 微信云存储图片处理参数
+  // imageMogr2/thumbnail/<width>x/quality/<quality>/format/webp
+  const params = `imageMogr2/thumbnail/${width}x/quality/${quality}/format/webp`
+
+  // 如果URL中已经有参数，需要正确拼接
+  if (url.includes('?')) {
+    return `${url}&${params}`
+  } else {
+    return `${url}?${params}`
+  }
+}
+
 module.exports = {
   formatTime,
-  formatTimeAgo
+  formatTimeAgo,
+  getCompressedImageUrl
 }

@@ -32,15 +32,15 @@
     </view>
 
     <!-- Images -->
-    <view class="card-images" wx:if="{{post.images.length > 0}}">
+    <view class="card-images" wx:if="{{post.images && post.images.length > 0}}">
       <view class="image-grid grid-{{post.images.length === 1 ? '1' : (post.images.length === 2 || post.images.length === 4) ? '2' : '3'}}">
-        <block wx:for="{{post.images}}" wx:for-item="img" wx:key="*this">
-          <image 
-            class="post-image" 
-            src="{{img}}" 
-            mode="aspectFill" 
-            catchtap="previewImage" 
-            data-current="{{img}}" 
+        <block wx:for="{{post.thumbnailImages || post.images}}" wx:for-item="img" wx:for-index="imgIdx" wx:key="*this">
+          <image
+            class="post-image"
+            src="{{img}}"
+            mode="aspectFill"
+            catchtap="previewImage"
+            data-current="{{post.images[imgIdx]}}"
             data-urls="{{post.images}}">
           </image>
         </block>

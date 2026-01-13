@@ -126,11 +126,13 @@ page {
   border-radius: 8rpx;
   width: 100%;
   height: 220rpx; /* Default height for grid items */
+  min-height: 200rpx; /* Ensure minimum height while loading */
   object-fit: cover;
 }
 
 .grid-1 .post-image {
   height: auto; /* Auto height for single image to maintain aspect ratio */
+  min-height: 300rpx; /* Ensure minimum height for single image */
   max-height: 600rpx;
   width: 100%;
 }
